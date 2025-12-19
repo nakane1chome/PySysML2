@@ -233,6 +233,22 @@ class RelationshipSpecializes(Relationship, NodeMixin):
 class RelationshipMessage(Relationship, NodeMixin):
 
     def __init__(self, name=None, parent=None, **kwargs):
-        
+
         super(RelationshipMessage, self).__init__(name=name, parent=parent, **kwargs)
+        self.sysml2_layer = ArchitectureLayers.systems_element.value
+
+
+class EnumDef(Element, NodeMixin):
+
+    def __init__(self, name=None, parent=None, **kwargs):
+
+        super(EnumDef, self).__init__(name=name, parent=parent, **kwargs)
+        self.sysml2_layer = ArchitectureLayers.systems_element.value
+
+
+class EnumValue(Element, NodeMixin):
+
+    def __init__(self, name=None, parent=None, **kwargs):
+
+        super(EnumValue, self).__init__(name=name, parent=parent, **kwargs)
         self.sysml2_layer = ArchitectureLayers.systems_element.value

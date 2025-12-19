@@ -431,10 +431,16 @@ class ModelTreeSysML2Visitor(SysML2Visitor):
         type_name = type_name.split("Context")[0]
         tags = []
         for kw in _SML2_KWS:
+            # Match keyword as a whole word with underscores as boundaries
+            # This prevents "port" from matching inside "import"
+            kw_lower = kw.value.lower()
+            type_lower = type_name.lower()
+
             if (
-                _DLMTR_UNDRSCR + kw.value.lower() in type_name.lower()
-                or kw.value.lower() + _DLMTR_UNDRSCR in type_name.lower()
-                or kw.value.lower() == type_name.lower()
+                _DLMTR_UNDRSCR + kw_lower + _DLMTR_UNDRSCR in type_lower  # _keyword_
+                or type_lower.startswith(kw_lower + _DLMTR_UNDRSCR)        # keyword_ at start
+                or type_lower.endswith(_DLMTR_UNDRSCR + kw_lower)          # _keyword at end
+                or kw_lower == type_lower                                   # exact match
             ):
                 tags.append(kw.value)
         return tags
@@ -614,9 +620,21 @@ class ModelTreeSysML2Visitor(SysML2Visitor):
         self._model_table_builder(ctx)
         return self.visitChildren(ctx)
 
-    # Visit a parse tree produced by SysML2Parser#part_def.
+    # Visit a parse tree produced by SysML2Parser#connection.
     def visitConnection(self, ctx: SysML2Parser.ConnectionContext):
         setattr(ctx, _SYSML2_TYPE_NAME, _SML2_KWS.KW_CONNECTION.value)
+        self._model_table_builder(ctx)
+        return self.visitChildren(ctx)
+
+    # Visit a parse tree produced by SysML2Parser#enum_def.
+    def visitEnum_def(self, ctx: SysML2Parser.Enum_defContext):
+        setattr(ctx, _SYSML2_TYPE_NAME, _SML2_KWS.KW_ENUM.value)
+        self._model_table_builder(ctx)
+        return self.visitChildren(ctx)
+
+    # Visit a parse tree produced by SysML2Parser#enum_value.
+    def visitEnum_value(self, ctx: SysML2Parser.Enum_valueContext):
+        setattr(ctx, _SYSML2_TYPE_NAME, "enum_value")
         self._model_table_builder(ctx)
         return self.visitChildren(ctx)
 

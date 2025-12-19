@@ -13,6 +13,8 @@ from pysysml2.modeling.element import (
     ConnectionEndPart,
     Doc,
     Element,
+    EnumDef,
+    EnumValue,
     Import,
     Include,
     Item,
@@ -147,6 +149,10 @@ class Model(NodeMixin):
                 smv._SML2_KWS.KW_USE.value, smv._SML2_KWS.KW_CASE.value
             ):
                 UseCase(**v)
+            elif v["sysml2_type"] == smv._SML2_KWS.KW_ENUM.value:
+                EnumDef(**v)
+            elif v["sysml2_type"] == "enum_value":
+                EnumValue(**v)
             elif v["sysml2_type"] == smv._SML2_KWS.KW_ABOUT.value:
                 raise NotImplementedError(
                     "{} keyword not implemented".format(smv._SML2_KWS.KW_ABOUT.value)

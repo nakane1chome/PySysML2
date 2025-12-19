@@ -45,7 +45,7 @@ def requires_graphviz(f: Optional[Callable] = None, python_only: bool = False):
         elif not dot_command_installed:
             reason = "graphviz not installed. `dot` command not found"
         else:
-            reason = None
+            reason = "graphviz is installed"
 
         skipif = pytest.mark.skipif(skip_condition, reason=reason)
         return skipif(f)

@@ -1,6 +1,6 @@
-# Generated from SysML2.g4 by ANTLR 4.13.2
+# Generated from SysML2.g4 by ANTLR 4.10
 from antlr4 import *
-if "." in __name__:
+if __name__ is not None and "." in __name__:
     from .SysML2Parser import SysML2Parser
 else:
     from SysML2Parser import SysML2Parser
@@ -126,6 +126,16 @@ class SysML2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by SysML2Parser#end_part.
     def visitEnd_part(self, ctx:SysML2Parser.End_partContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SysML2Parser#enum_def.
+    def visitEnum_def(self, ctx:SysML2Parser.Enum_defContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SysML2Parser#enum_value.
+    def visitEnum_value(self, ctx:SysML2Parser.Enum_valueContext):
         return self.visitChildren(ctx)
 
 
