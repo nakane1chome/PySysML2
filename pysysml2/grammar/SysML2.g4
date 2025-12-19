@@ -21,6 +21,7 @@ element : namespace
         | doc
         | statement
         | port
+        | enum_def
         ;
 
 // A namespace is an element with a scope defined by curly braces
@@ -31,10 +32,12 @@ namespace   : sysml2_package
             | doc
             | port
             | connect
+            | connection
+            | enum_def
             ;
 //------------------------------------------------------------------------------
 sysml2_package: KW_PACKAGE ID '{' namespace* '}';
-part_blk: (feature | comment | doc | part | port | connect | connection);
+part_blk: (feature | comment | doc | part | port | connect | connection | enum_def);
 part: (part_def | part_def_specializes);
 // part_def: ((KW_PART KW_DEF ID '{' part_blk* '}')|(KW_PART KW_DEF ID';'));
 part_def: ((KW_PART KW_DEF? ID '{' part_blk* '}') | (KW_PART KW_DEF? ID ';'));
@@ -95,9 +98,13 @@ feature : feature_attribute_def
 //------------------------------------------------------------------------------
 
 // Connections
-connection: KW_CONNECTION ID '{' connection_blk* '}';
+connection: KW_CONNECTION KW_DEF? ID '{' connection_blk* '}';
 connection_blk: (end_part | feature_attribute_def);
 end_part: KW_END KW_PART ID ';';
+
+// Enumerations
+enum_def: KW_ENUM KW_DEF ID '{' enum_value* '}' | KW_ENUM KW_DEF ID ';';
+enum_value: ID ';';
 
 
 // Connect relationships
@@ -107,12 +114,13 @@ connect_expr: ID ('.' ID)*?;
 
 // Attributes
 // feature_attribute_def: KW_ATTRIBUTE ID ':' TYPE ';';
-feature_attribute_def: KW_ATTRIBUTE ID ':' TYPE ';' | KW_ATTRIBUTE ID '=' CONSTANT ';';
+// Support both built-in types (TYPE) and custom types (ID) like enums
+feature_attribute_def: KW_ATTRIBUTE ID ':' (TYPE | ID) ';' | KW_ATTRIBUTE ID '=' CONSTANT ';';
 
 // E.g. attribute :> 'WiFi Protocol': String = "IEEE 802.11 b/g/n wireless LAN";
 // E.g. attribute redefines 'Primary Interface' = "USB 1.1";
 // E.g. attribute :> 'WiFi Protocol': String = "IEEE 802.11 b/g/n wireless LAN";
-feature_attribute_redefines: KW_ATTRIBUTE (KW_REDEFINES | KW_SYM_REDEFINES | KW_SYM_SUBSETS) ID (':' TYPE)? '=' CONSTANT ';';
+feature_attribute_redefines: KW_ATTRIBUTE (KW_REDEFINES | KW_SYM_REDEFINES | KW_SYM_SUBSETS) ID (':' (TYPE | ID))? '=' CONSTANT ';';
 // Part specializations and subsets
 feature_part_specializes: KW_PART ID ':' ID MULTIPLICITY? (';' | '{' part_blk* '}');
 feature_part_specializes_subsets: KW_PART ID ':' ID MULTIPLICITY? (KW_SUBSETS | KW_SYM_SUBSETS) ID';';
@@ -182,9 +190,10 @@ KW_CONNECTION: 'connection'; // 'connection' before 'connect', per Antlr4 "longe
 KW_CONNECT: 'connect';
 KW_DEF: 'def';
 KW_DOC: 'doc';
+KW_END: 'end';
+KW_ENUM: 'enum';
 // Update
 KW_FROM: 'from';
-KW_END: 'end';
 KW_IMPORT: 'import'; // 'import' before 'port', per Antlr4 "longest match" rule
 // Include
 KW_INCLUDE: 'include';

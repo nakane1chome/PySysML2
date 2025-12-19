@@ -1,6 +1,6 @@
-# Generated from SysML2.g4 by ANTLR 4.13.2
+# Generated from SysML2.g4 by ANTLR 4.10
 from antlr4 import *
-if "." in __name__:
+if __name__ is not None and "." in __name__:
     from .SysML2Parser import SysML2Parser
 else:
     from SysML2Parser import SysML2Parser
@@ -221,6 +221,24 @@ class SysML2Listener(ParseTreeListener):
 
     # Exit a parse tree produced by SysML2Parser#end_part.
     def exitEnd_part(self, ctx:SysML2Parser.End_partContext):
+        pass
+
+
+    # Enter a parse tree produced by SysML2Parser#enum_def.
+    def enterEnum_def(self, ctx:SysML2Parser.Enum_defContext):
+        pass
+
+    # Exit a parse tree produced by SysML2Parser#enum_def.
+    def exitEnum_def(self, ctx:SysML2Parser.Enum_defContext):
+        pass
+
+
+    # Enter a parse tree produced by SysML2Parser#enum_value.
+    def enterEnum_value(self, ctx:SysML2Parser.Enum_valueContext):
+        pass
+
+    # Exit a parse tree produced by SysML2Parser#enum_value.
+    def exitEnum_value(self, ctx:SysML2Parser.Enum_valueContext):
         pass
 
 
