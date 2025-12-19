@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pysysml2"
-version = "0.1.1"
+version = "0.1.2.1"
 description = "Python based parser for the SysML 2.0 textual modeling language."
 authors = ["Keith Lucas <ke.le.luc@gmail.com>"]
 readme = "README.md"
